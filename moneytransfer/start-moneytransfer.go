@@ -32,7 +32,7 @@ func StartMoneyTransfer(pmnt *PaymentDetails) (wfinfo *WorkflowInfo, starterr er
 	}
 
 	// Load the Temporal Cloud from env
-	clientOptions, err := u.LoadClientOptions(u.NoSDKMetrics)
+	clientOptions, err := u.LoadClientOptions(u.NoSDKMetrics, "")
 	if err != nil {
 		log.Printf("StartMoneyTransfer-%s: Failed to load Temporal Cloud environment: %v", thisid, err)
 		wfinfo.Info = err.Error()

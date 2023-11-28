@@ -17,7 +17,7 @@ import (
 )
 
 /* LoadClientOptions - Return client options for Temporal Cloud */
-func LoadClientOptions(addMetrics bool) (client.Options, error) {
+func LoadClientOptions(addMetrics bool, metricsPort string) (client.Options, error) {
 
 	// Read env variables
 	targetHost := os.Getenv("TEMPORAL_HOST_URL")
@@ -84,9 +84,10 @@ func LoadClientOptions(addMetrics bool) (client.Options, error) {
 					// Add SDK Metrics endpoint (for default Go SDK metrics)
 					MetricsHandler: sdktally.NewMetricsHandler(newPrometheusScope(
 						prometheus.Configuration{
-							ListenAddress: "0.0.0.0:8077",
+							ListenAddress: "0.0.0.0:" + metricsPort,
 							TimerType:     "histogram",
 						},
+						metricsPort,
 					)),
 				}, nil
 

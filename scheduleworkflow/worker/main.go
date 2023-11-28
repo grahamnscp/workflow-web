@@ -15,7 +15,7 @@ import (
 func main() {
 	log.Printf("%sGo worker starting..%s", u.ColorGreen, u.ColorReset)
 
-	clientOptions, err := u.LoadClientOptions(u.NoSDKMetrics)
+	clientOptions, err := u.LoadClientOptions(u.NoSDKMetrics, "")
 	if err != nil {
 		log.Fatalf("Failed to load Temporal Cloud environment: %v", err)
 	}

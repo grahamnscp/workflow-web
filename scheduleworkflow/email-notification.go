@@ -8,9 +8,10 @@ import (
 	"text/template"
 	"time"
 
+	u "webapp/utils"
+
 	mail "github.com/xhit/go-simple-mail/v2"
 	"go.temporal.io/sdk/client"
-  u "webapp/utils"
 )
 
 func SendEmailNotification(ctx context.Context, processStage int, sd ScheduleDetails) error {
@@ -36,7 +37,7 @@ func SendEmailNotification(ctx context.Context, processStage int, sd ScheduleDet
 	log.Printf("%sSendEmailNotification:%s email: %s, subject: %s", u.ColorGreen, u.ColorReset, sd.Email, emailSubject)
 
 	// Schedule Details may have changed since passed to workflow at creation
-	clientOptions, err := u.LoadClientOptions(u.NoSDKMetrics)
+	clientOptions, err := u.LoadClientOptions(u.NoSDKMetrics, "")
 	if err != nil {
 		log.Fatalf("%sSendEmailNotification:%s Failed to load Temporal Cloud environment:%s %v\n", u.ColorGreen, u.ColorRed, u.ColorReset, err)
 	}

@@ -10,7 +10,7 @@ import (
 	sdktally "go.temporal.io/sdk/contrib/tally"
 )
 
-func newPrometheusScope(c prometheus.Configuration) tally.Scope {
+func newPrometheusScope(c prometheus.Configuration, metricsPort string) tally.Scope {
 	reporter, err := c.NewReporter(
 		prometheus.ConfigurationOptions{
 			Registry: prom.NewRegistry(),
@@ -31,6 +31,6 @@ func newPrometheusScope(c prometheus.Configuration) tally.Scope {
 	scope, _ := tally.NewRootScope(scopeOpts, time.Second)
 	scope = sdktally.NewPrometheusNamingScope(scope)
 
-	log.Println("Worker SDK Metrics Prometheus scope created: http://0.0.0.0:8077/metrics")
+	log.Printf("Worker SDK Metrics Prometheus scope created: http://0.0.0.0:%s/metrics", metricsPort)
 	return scope
 }

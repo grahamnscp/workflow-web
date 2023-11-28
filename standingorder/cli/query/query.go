@@ -19,7 +19,7 @@ func main() {
 		log.Fatalf("Parameter --workflow-id <workflow id> is required")
 	}
 
-	clientOptions, err := u.LoadClientOptions(u.NoSDKMetrics)
+	clientOptions, err := u.LoadClientOptions(u.NoSDKMetrics, "")
 	if err != nil {
 		log.Fatalf("Failed to load Temporal Cloud environment: %v", err)
 	}

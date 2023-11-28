@@ -24,7 +24,7 @@ func main() {
 	}
 	log.Println("  Amend Parameters: --amount", *amount, "--period", *period)
 
-	clientOptions, err := u.LoadClientOptions(u.NoSDKMetrics)
+	clientOptions, err := u.LoadClientOptions(u.NoSDKMetrics, "")
 	if err != nil {
 		log.Fatalf("Failed to load Temporal Cloud environment: %v", err)
 	}
