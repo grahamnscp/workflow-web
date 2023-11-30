@@ -22,8 +22,8 @@ func StandingOrderWorkflow(ctx workflow.Context, pdetails mt.PaymentDetails, psc
 		Details:  pdetails,
 	}
 
-	// upcert StandingOrder as ACTIVE
-	_ = u.UpcertSearchAttribute(ctx, "CustomStringField", "ACTIVE-SORDER")
+	// upsert StandingOrder as ACTIVE
+	_ = u.UpsertSearchAttribute(ctx, "CustomStringField", "ACTIVE-SORDER")
 
 	// Define query handlers for variables
 	//
@@ -176,7 +176,7 @@ func StandingOrderWorkflow(ctx workflow.Context, pdetails mt.PaymentDetails, psc
 		}
 		if !sorder.Schedule.Active {
 			logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorReset, "Was Cancelled.")
-			_ = u.UpcertSearchAttribute(ctx, "CustomStringField", "CANCELLED-SORDER")
+			_ = u.UpsertSearchAttribute(ctx, "CustomStringField", "CANCELLED-SORDER")
 
 		} else if amended {
 			logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorReset, "Standing Order has been amended:", sorder.Details)
@@ -212,7 +212,7 @@ func StandingOrderWorkflow(ctx workflow.Context, pdetails mt.PaymentDetails, psc
 				logger.Error(u.ColorGreen, "S/O-Workflow:", u.ColorRed, "Child workflow Transfer failed!", u.ColorReset, err)
 				// do some failed sorder Activity.. email notification etc..
 				sorder.Schedule.Active = false
-				_ = u.UpcertSearchAttribute(ctx, "CustomStringField", "FAILED-SORDER")
+				_ = u.UpsertSearchAttribute(ctx, "CustomStringField", "FAILED-SORDER")
 
 				// ToDo: Call a sorder notification activity here..
 				logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorRed, "Scheduled payment:", sorder.Details, "Completed with Error,", u.ColorReset, err)

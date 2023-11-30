@@ -98,14 +98,14 @@ export MYSQL_PASSWORD=mysqlpw
 
 The demo app makes use of a custom search attribute that needs to be created in Temporal Cloud for the namespace:   
 
-Name: CustomStringField, Type: String
+Name: CustomStringField, Type: Text
 
 Usage in workflow:
 ```
-workflow.go:  _ = UpcertSearchAttribute(ctx, "CustomStringField", "PROCESSING")
-workflow.go:    _ = UpcertSearchAttribute(ctx, "CustomStringField", "FAILED")
-workflow.go:    _ = UpcertSearchAttribute(ctx, "CustomStringField", "FAILED")
-workflow.go:  _ = UpcertSearchAttribute(ctx, "CustomStringField", "COMPLETED")
+workflow.go:  _ = UpsertSearchAttribute(ctx, "CustomStringField", "PROCESSING")
+workflow.go:    _ = UpsertSearchAttribute(ctx, "CustomStringField", "FAILED")
+workflow.go:    _ = UpsertSearchAttribute(ctx, "CustomStringField", "FAILED")
+workflow.go:  _ = UpsertSearchAttribute(ctx, "CustomStringField", "COMPLETED")
 ```
    
 Note: To simulate a banking service outage on an activity without the need to restart the workers there is a bank status UI in the Bank management app.

@@ -35,7 +35,7 @@ func TransferWorkflow(ctx workflow.Context, input PaymentDetails, delay int) (st
 	ctx = workflow.WithActivityOptions(ctx, activityoptions)
 
 	// Set search attribute status to PROCESSING
-	_ = u.UpcertSearchAttribute(ctx, "CustomStringField", "PROCESSING")
+	_ = u.UpsertSearchAttribute(ctx, "CustomStringField", "PROCESSING")
 
 	/* Withdraw money Activity - (blocks until completion with .Get function) */
 	var withdrawOutput string
@@ -44,7 +44,7 @@ func TransferWorkflow(ctx workflow.Context, input PaymentDetails, delay int) (st
 
 	if withdrawErr != nil {
 		// Set search attribute status to FAILED
-		_ = u.UpcertSearchAttribute(ctx, "CustomStringField", "FAILED")
+		_ = u.UpsertSearchAttribute(ctx, "CustomStringField", "FAILED")
 		logger.Info(u.ColorGreen, "Transfer-Workflow:", u.ColorReset, "Complete.", u.ColorRed, "(Withdraw Failed)", u.ColorReset)
 		return "", fmt.Errorf("Withdraw: failed to withdraw funds from: %v, %w", input.SourceAccount, withdrawErr)
 	}
@@ -63,7 +63,7 @@ func TransferWorkflow(ctx workflow.Context, input PaymentDetails, delay int) (st
 		// The deposit failed; put money back in original account.
 
 		// Set search attribute status to FAILED
-		_ = u.UpcertSearchAttribute(ctx, "CustomStringField", "FAILED")
+		_ = u.UpsertSearchAttribute(ctx, "CustomStringField", "FAILED")
 
 		/* Refund money Activity */
 		var result string
@@ -84,7 +84,7 @@ func TransferWorkflow(ctx workflow.Context, input PaymentDetails, delay int) (st
 	result := fmt.Sprintf("Transfer complete (transaction IDs: Withdraw: %s, Deposit: %s)", withdrawOutput, depositOutput)
 
 	// Set search attribute status to COMPLETED
-	_ = u.UpcertSearchAttribute(ctx, "CustomStringField", "COMPLETED")
+	_ = u.UpsertSearchAttribute(ctx, "CustomStringField", "COMPLETED")
 
 	logger.Info(u.ColorGreen, "Transfer-Workflow:", u.ColorReset, "Complete", "-", workflow.GetInfo(ctx).WorkflowExecution.ID)
 

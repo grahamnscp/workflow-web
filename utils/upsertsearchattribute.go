@@ -7,8 +7,8 @@ import (
 )
 
 
-/* UpcertSearchAttribute in Temporal Workflow */
-func UpcertSearchAttribute(ctx workflow.Context, attribute string, value string) (err error) {
+/* UpsertSearchAttribute in Temporal Workflow */
+func UpsertSearchAttribute(ctx workflow.Context, attribute string, value string) (err error) {
 
 	attributes := map[string]interface{}{
 		attribute: value,
