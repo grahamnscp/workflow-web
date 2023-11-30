@@ -14,6 +14,8 @@ docker logs mysql
 Sample data:
 ```
 docker exec -it mysql mysql -u root -p
+dbroot
+
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 ...
 
