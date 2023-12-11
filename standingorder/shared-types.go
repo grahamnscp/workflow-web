@@ -19,3 +19,4 @@ type StandingOrder struct {
 	Details  mt.PaymentDetails
 }
 
+var maxSOrdersPerWF int = 12

@@ -21,7 +21,6 @@ func Withdraw(ctx context.Context, data PaymentDetails) (string, error) {
 		log.Printf("%sTransfer-Workflow-Withdraw-Activity:%s Failed to withdraw funds from account: %s, %v%s",
 			u.ColorGreen, u.ColorRed, data.SourceAccount, err, u.ColorReset)
 	}
-
 	return confirmation, err
 }
 

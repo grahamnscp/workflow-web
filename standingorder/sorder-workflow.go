@@ -16,6 +16,9 @@ func StandingOrderWorkflow(ctx workflow.Context, pdetails mt.PaymentDetails, psc
 	logger := workflow.GetLogger(ctx)
 	logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorReset, "Started", "-", workflow.GetInfo(ctx).WorkflowExecution.ID)
 
+	// Counter for continue-as-new
+	var transferCounter = 0
+
 	// local workflow variable
 	sorder := StandingOrder{
 		Schedule: pschedule,
@@ -161,7 +164,7 @@ func StandingOrderWorkflow(ctx workflow.Context, pdetails mt.PaymentDetails, psc
 	amended := false
 	for sorder.Schedule.Active {
 
-		logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorReset, "Waiting for next Scheduled Payment (", sorder.Schedule.PeriodDuration, ")..")
+		logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorReset, "Sleeping until next Scheduled Payment (", sorder.Schedule.PeriodDuration, ")..")
 
 		// Sleep for time but interrupt if cancel signal comes in:
 		workflow.AwaitWithTimeout(ctx, sorder.Schedule.PeriodDuration, selector.HasPending)
@@ -202,11 +205,11 @@ func StandingOrderWorkflow(ctx workflow.Context, pdetails mt.PaymentDetails, psc
 				TaskQueue:  mt.MoneyTransferTaskQueueName,
 				//TaskQueue: StandingOrdersTaskQueueName,
 			}
-			ctx = workflow.WithChildOptions(ctx, cwo)
+			childCtx := workflow.WithChildOptions(ctx, cwo)
 
 			var delay int = 5 // just to slow it down for demos
 			var result string
-			err := workflow.ExecuteChildWorkflow(ctx, mt.TransferWorkflow, sorder.Details, delay).Get(ctx, &result)
+			err := workflow.ExecuteChildWorkflow(childCtx, mt.TransferWorkflow, sorder.Details, delay).Get(childCtx, &result)
 
 			if err != nil {
 				logger.Error(u.ColorGreen, "S/O-Workflow:", u.ColorRed, "Child workflow Transfer failed!", u.ColorReset, err)
@@ -218,8 +221,20 @@ func StandingOrderWorkflow(ctx workflow.Context, pdetails mt.PaymentDetails, psc
 				logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorRed, "Scheduled payment:", sorder.Details, "Completed with Error,", u.ColorReset, err)
 
 			} else {
+				// Increment the payment counter
+				transferCounter++
+
 				// This Transfer is complete, no more work to do this period
-				logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorReset, "Scheduled payment:", sorder.Details, "Completed with result:", result)
+				logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorReset, "Scheduled payment[", transferCounter, "]:", sorder.Details, "Completed with result:", result)
+			}
+			if transferCounter == maxSOrdersPerWF {
+
+		    logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorYellow, "Workflow count reached[", transferCounter, "], Continuing as New..")
+
+				transferCounter = 0
+				_ = u.UpsertSearchAttribute(ctx, "CustomStringField", "CASN-SORDER")
+
+				return "Workflow Continued as New", workflow.NewContinueAsNewError(ctx, StandingOrderWorkflow, pdetails, pschedule)
 			}
 		}
 	}
