@@ -229,7 +229,7 @@ func StandingOrderWorkflow(ctx workflow.Context, pdetails mt.PaymentDetails, psc
 			}
 			if transferCounter == maxSOrdersPerWF {
 
-		    logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorYellow, "Workflow count reached[", transferCounter, "], Continuing as New..")
+		    logger.Info(u.ColorGreen, "S/O-Workflow:", u.ColorYellow, "Workflow count reached[", transferCounter, "] - Continuing as New..")
 
 				transferCounter = 0
 				_ = u.UpsertSearchAttribute(ctx, "CustomStringField", "CASN-SORDER")
