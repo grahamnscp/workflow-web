@@ -2,21 +2,20 @@
   <h1 class="logo"><a tabindex="2" accesskey="1" href="/"><img src="/static/temporal-white.png" width="70"
         height="65" /></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Workflow WebApp</h1>
 
-  <p>
-    <hr>
   <div class="row g-0 bg-light position-relative">
-    <div class="col-md-3 mb-md-0 p-md-4">
+    <div class="col-md-3 mb-md-0 p-md-5">
       <img src="/static/money-transfer-header.png" class="w-100" alt="transfer">
     </div>
-    <div class="col-md-8 p-8 ps-md-0"><br>
-      <h4 class="mt-0">Money Transfer Demo</h4>
-      <p>Sample Go web app with a mysql database table acting as a task queue feeding money transfer requests that are
-        processed using Temporal Workflow and Activities.<br><br>
-        A background thread polls the local request table and submits a new Temporal Workflow as required, the resultant
-        workflow and run ids are updated in the local table as well as the end return result of the workflow.<br><br>
-        <a href="/static/demo-architecture.png" target="_blank">Demo Architecture Diagram</a>
+    <div class="col-md-8 p-8 ps-md-0"><p>
+      <h4 class="mt-0">Money Transfer</h4><p>
+      Sample web app with a mysql database table acting as a task queue feeding money transfer requests
+      that are processed using Temporal Workflow and Activities.<p>
+      A background thread polls the local request table and submits a new Temporal Workflow as required, 
+      the resultant workflow and runid values are updated in the local table as well as the end return 
+      result of the workflow.
       </p>
-      <h3><a href="/transfers"><button type="button" class="btn btn-primary btn-sm">Launch</button></a></h3>
+      <a href="/transfers"><button type="button" class="btn btn-primary btn-sm">Launch</button></a>&nbsp;&nbsp;&nbsp;
+      <a href="/static/demo-architecture.png" target="_blank">Demo Architecture Diagram</a>
     </div>
   </div>
 
@@ -25,46 +24,66 @@
     <div class="col-md-3 mb-md-0 p-md-3">
       <img src="/static/standing-order-header.png" class="w-100" alt="standingorders">
     </div>
-    <div class="col-md-8 p-6 ps-md-0"><br>
-      <h4 class="mt-0">Standing Orders</h4>
-      <p>Standing Order example showing regular payments using extra Temporal Go SDK functionality.<br>
-        Active Standing Orders are not held in the local app database, a custom search attribute is used in the workflow
-        and
-        the active orders are queried directly from the Temporal Cloud server. S/O details are fetched using Temporal
-        workflow queries.<br>
-        A Standing order can be Amended and Cancelled which is implemented by sending Temporal Signals to the
-        workflow.<br><br>
-        <a href="/static/sorders-demo-architecture.png" target="_blank">Demo Architecture Diagram</a>&nbsp;&nbsp;&nbsp;
-        <a href="/static/sorders-detailed-architecture.png" target="_blank">Detailed Diagram</a>
+    <div class="col-md-8 p-6 ps-md-0"><p>
+      <h4 class="mt-0">Standing Orders</h4><p>
+      Standing Order / Regular Payments using extra Temporal Go SDK functionality.<p>
+      Active Standing Orders are not held in the local app database, a custom search attribute is used in 
+      the workflow and the active orders are queried directly from the Temporal Cloud server. S/O details 
+      are fetched using Temporal workflow queries.<p>
+      A Standing order can be Amended and Cancelled which is implemented by sending Temporal Signals to the
+      workflow.  After 12 payments the workflow performs continue-as-new to limit WF history size.<p>
       </p>
-      <h3><a href="/listsorders"><button type="button" class="btn btn-primary btn-sm">Launch</button></a></h3>
+      <a href="/listsorders"><button type="button" class="btn btn-primary btn-sm">Launch</button></a>&nbsp;&nbsp;&nbsp;
+      <a href="/static/sorders-demo-architecture.png" target="_blank">Demo Architecture Diagram</a>&nbsp;&nbsp;&nbsp;
+      <a href="/static/sorders-detailed-architecture.png" target="_blank">Detailed Diagram</a>
     </div>
   </div>
 
   <hr>
   <div class="row g-0 bg-light position-relative">
-    <div class="col-md-3 mb-md-0 p-md-4">
+    <div class="col-md-3 mb-md-0 p-md-3">
+      <img src="/static/account-onboarding-header.png" class="w-100" alt="accountonboarding">
+    </div>
+    <div class="col-md-8 p-6 ps-md-0"><p>
+      <h4 class="mt-0">New Account Onboarding</h4><p>
+      Onboarding workflow to process a new bank account application and provision the account.<p>
+      The main workflow spawns two child workflows to handle Credit and Fraud checks asynchronously.<br>
+      The Credit check is automatic based on a Blacklist mongodb collection lookup, the Fraud check 
+      uses a Fraud Risk collection, for high fraud risks a human level 2 review and approval is required.<p>
+      Human interaction is handled via <a href="http://localhost:8025/#">email</a> and with url token to map back to workflows.<p>
+      <a href="/newaccapp"><button type="button" class="btn btn-primary btn-sm">Launch</button></a>&nbsp;&nbsp;&nbsp;
+      <a href="/static/onboarding-demo-architecture.png" target="_blank">Demo Workflow Diagram</a>
+      </p>
+    </div>
+  </div>
+
+  <hr>
+  <div class="row g-0 bg-light position-relative">
+    <div class="col-md-3 mb-md-0 p-md-3">
       <img src="/static/bank-accounts-header.png" class="w-100" alt="accounts">
     </div>
-    <div class="col-md-8 p-4 ps-md-0"><br>
-      <h4 class="mt-0">Local Bank Managment</h4>
-      <p>Local App for managing a mysql database table of user account entries with a balance column.<br><br>
-        These account names and balances are used in the Transfers mock-bank demo.</p>
-      <h3><a href="/accounts"><button type="button" class="btn btn-primary btn-sm">Launch</button></a></h3>
+    <div class="col-md-8 p-4 ps-md-0">
+      <h4 class="mt-0">Bank Admin Account Managment</h4><p>
+      Local App for managing a mysql database table of user account entries with a balance column.<br><br>
+      These account names and balances are used in the Transfers mock-bank demo.<p>
+      Bank Status can be toggled to simulate an outage for the mock backend API
+      </p>
+      <a href="/accounts"><button type="button" class="btn btn-primary btn-sm">Launch</button></a>&nbsp;
+      <a href="/bankstatus"><button type="button" class="btn btn-primary btn-sm">Bank Status</button></a>
     </div>
   </div>
 
   <hr>
   <div class="row g-0 bg-light position-relative">
-    <div class="col-md-3 mb-md-0 p-md-4">
+    <div class="col-md-3 mb-md-0 p-md-3">
       <img src="/static/calendar-schedule.png" class="w-100" alt="schedule">
     </div>
-    <div class="col-md-8 p-8 ps-md-0"><br>
-      <h4 class="mt-0">Schedule Workflow</h4>
-      <p>Sample Go Temporal Workflow to demonstrate the schedules feature.
-        Schedule a workflow to run in the future based on a schedule. Test workflow just sends emails when it runs.
+    <div class="col-md-8 p-8 ps-md-0"><p>
+      <h4 class="mt-0">Schedule Workflow Sample</h4><p>
+      Sample Go Temporal Workflow to demonstrate the schedules feature.
+      Schedule a workflow to run in the future based on a schedule. Test workflow just sends emails when it runs.
       </p>
-      <h3><a href="/schedules"><button type="button" class="btn btn-primary btn-sm">Launch</button></a></h3>
+      <a href="/schedules"><button type="button" class="btn btn-primary btn-sm">Launch</button></a>
     </div>
   </div>
 

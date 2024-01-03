@@ -36,7 +36,7 @@ func main() {
 
 	w := worker.New(c, so.StandingOrdersTaskQueueName, worker.Options{Identity: workername})
 
-	log.Println("Go worker registering for Workflow standingorder.StandingOrderWorkflow:")
+	log.Println("Go worker registering for Workflow standingorder.StandingOrderWorkflow..")
 	w.RegisterWorkflow(so.StandingOrderWorkflow)
 
 	// Start listening to the Task Queue.

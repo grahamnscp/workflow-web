@@ -39,7 +39,7 @@ func main() {
 }
 
 func cancelparseCLIArgs(args []string) (*string, error) {
-	set := flag.NewFlagSet("hello-workflow", flag.ExitOnError)
+	set := flag.NewFlagSet("signal-workflow", flag.ExitOnError)
 	wkflId := set.String("workflow-id", "", "Workflow Id to access")
 	if err := set.Parse(args); err != nil {
 		return nil, fmt.Errorf("failed parsing args: %w", err)

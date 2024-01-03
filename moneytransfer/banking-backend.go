@@ -52,8 +52,8 @@ func ReadDbAccounts() DbAccounts {
 
 /* checkBankService */
 func checkBankService() bool {
-	//bankStatus := os.Getenv("BANK_SERVICE_AVAILABLE")
-	var bankAPIStatus int = 10
+
+	var bankAPIStatus int = 200
 
 	// Get database connection
 	dbc, _ := u.GetDBConnection()

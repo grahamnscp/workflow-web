@@ -1,5 +1,5 @@
 <div class="container">
-  <h1 class="logo"><a tabindex="2" accesskey="1" href="/"><img src="/static/bank-accounts.png" width=150 height=150 /></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bank</h1>
+  <h1 class="logo"><a tabindex="2" accesskey="1" href="/"><img src="/static/bank-accounts.png" width=150 height=150 /></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bank Admin</h1>
 
 <br>
 <h3>Acccount Details:</h3>
@@ -11,6 +11,7 @@
       <td>Account Number</td>
       <td>Account Name</td>
       <td>Account Balance</td>
+      <td>User Email</td>
     </tr>
   </thead>
   <tbody>
@@ -19,6 +20,7 @@
       <td>{{ .AccountNumber }}</td>
       <td>{{ .AccountName }}</td>
       <td>{{ .AccountBalance }}</td>
+      <td>{{ .Email }}</td>
     </tr>
   </tbody>
 </table>

@@ -1,0 +1,42 @@
+<div class="container">
+  <h1 class="logo"><a tabindex="2" accesskey="1" href="/"><img src="/static/accapp.png" width=150
+        height=150 /></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bank - New Account Application</h1>
+
+{{ if .Success }}
+
+<br>
+<h3>Your New Account Application has been submitted.</h3>
+<p>Please check your email for status updates.<br>
+</p>
+
+{{ else }}
+
+<br>
+<h3>New Account Application Form:</h3>
+<br>
+
+<form class="form-horizontal" action="/newaccapp" method="POST">
+
+  <div class="form-group">
+    <label for="firstname" class="col-sm-3 control-label">First Name:</label>
+    <input type="text" class="col-sm-2" name="firstname" size="10" placeholder="FirstName">
+  </div>
+  <div class="form-group">
+    <label for="surname" class="col-sm-3 control-label">Surname:</label>
+    <input type="text" class="col-sm-2" name="surname" size="10" placeholder="Surname">
+  </div>
+  <div class="form-group">
+    <label for="email" class="col-sm-3 control-label">Email Address:</label>
+    <input type="text" class="col-sm-3" name="email" size="30" placeholder="Email">
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-4">
+      <button type="submit" class="btn btn-primary btn-sm">Submit Application</button>
+    </div>
+  </div>
+</form>
+
+
+{{end}}
+</div>

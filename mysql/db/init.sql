@@ -18,6 +18,7 @@ CREATE TABLE accounts (
   account_number  INT NOT NULL,
   account_name 	  VARCHAR(30) NOT NULL,
   account_balance FLOAT NOT NULL,
+  email           VARCHAR(40) NOT NULL,
   datestamp       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (account_id),
   UNIQUE KEY transfer (account_name)

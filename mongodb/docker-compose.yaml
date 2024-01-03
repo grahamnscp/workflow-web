@@ -1,0 +1,34 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_DATABASE: bank
+    ports:
+      - 27017:27017
+    volumes:
+      - ./initdb/:/docker-entrypoint-initdb.d/:ro
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongoui
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: false
+      ME_CONFIG_MONGODB_AUTH_DATABASE: bank
+      ME_CONFIG_BASICAUTH_USERNAME: bankuser
+      ME_CONFIG_BASICAUTH_PASSWORD: bankuserpwd
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: bankuser
+      ME_CONFIG_MONGODB_ADMINPASSWORD: bankuserpwd
+      #ME_CONFIG_MONGODB_URL: mongodb://admin:secret@mongodb:27017/

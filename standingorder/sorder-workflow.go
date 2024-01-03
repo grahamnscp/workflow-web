@@ -144,7 +144,7 @@ func StandingOrderWorkflow(ctx workflow.Context, pdetails mt.PaymentDetails, psc
 		sorder.Schedule.PeriodDuration = time.Duration(scheduleSignal) * time.Second
 	})
 
-	// cancel subscription signal
+	// cancel standing order signal
 	cancelCh := workflow.GetSignalChannel(ctx, "cancelsorder")
 	selector.AddReceive(cancelCh, func(ch workflow.ReceiveChannel, _ bool) {
 		// do this when signal received

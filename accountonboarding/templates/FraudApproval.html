@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Image and text -->
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+      <img src="http://localhost:8085/static/email-icon.png" width="50"
+        class="d-inline-block align-top" alt="">
+      &nbsp;&nbsp;&nbsp;Workflow Activity - Account Application Fraud Approval Required
+    </a>
+  </nav>
+  <div class="container">
+    <div class="hero-unit">
+      <br><img src="http://localhost:8085/static/email-fraud-review-icon.jpeg" width="150">
+      <br><br>
+      <h2>Fraud Review Approval Required for {{.Email}}</h2>
+      <p>
+      <p>Application Details:</p>
+      <p>
+        <li>Name: {{ .FirstName }} {{ .Surname }}</li>
+        <li>Email: {{ .Email }}</li>
+      </p><br>
+      <p>Fraud Review Form:&nbsp;&nbsp;<a href="{{ .URL }}"><button type="button" class="btn btn-primary btn-sm">Review</button></a></p>
+    </div>
+  </div>
+</body>
+
+</html>

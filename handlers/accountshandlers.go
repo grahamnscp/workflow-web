@@ -12,15 +12,16 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 
-	"webapp/utils"
+	u "webapp/utils"
 )
 
-// DB: account_id account_number account_name account_balance datestamp
+// DB: account_id account_number account_name account_balance email datestamp
 type Account struct {
 	AccountId      int
 	AccountNumber  int
 	AccountName    string
 	AccountBalance float64
+	Email          string
 }
 
 type BankStatusType struct {
@@ -31,7 +32,7 @@ type BankStatusType struct {
 func Home(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Home: called")
-	utils.Render(w, "templates/Home.html", nil)
+	u.Render(w, "templates/Home.html", nil)
 }
 
 /* ListAccounts */
@@ -40,7 +41,7 @@ func ListAccounts(w http.ResponseWriter, r *http.Request) {
 	log.Println("ListAccounts: called")
 
 	// Get database connection
-	dbc, _ := utils.GetDBConnection()
+	dbc, _ := u.GetDBConnection()
 	defer dbc.Close()
 
 	sqlStatement := `SELECT account_id, account_number, account_name, account_balance FROM dataentry.accounts`
@@ -62,7 +63,7 @@ func ListAccounts(w http.ResponseWriter, r *http.Request) {
 		accounts = append(accounts, acc)
 	}
 
-	utils.Render(w, "templates/ListAccounts.html", accounts)
+	u.Render(w, "templates/ListAccounts.html", accounts)
 }
 
 /* ShowAccount */
@@ -81,10 +82,10 @@ func ShowAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get database connection
-	dbc, _ := utils.GetDBConnection()
+	dbc, _ := u.GetDBConnection()
 	defer dbc.Close()
 
-	sqlStatement := fmt.Sprintf("select account_id,account_number,account_name,account_balance from dataentry.accounts where account_name='%s'", name)
+	sqlStatement := fmt.Sprintf("SELECT account_id,account_number,account_name,account_balance,email FROM dataentry.accounts WHERE account_name='%s'", name)
 	rows, dberr := dbc.Query(sqlStatement)
 	if dberr != nil {
 		if dberr == sql.ErrNoRows {
@@ -99,11 +100,11 @@ func ShowAccount(w http.ResponseWriter, r *http.Request) {
 	acc := Account{}
 
 	for rows.Next() {
-		rows.Scan(&acc.AccountId, &acc.AccountNumber, &acc.AccountName, &acc.AccountBalance)
+		rows.Scan(&acc.AccountId, &acc.AccountNumber, &acc.AccountName, &acc.AccountBalance, &acc.Email)
 	}
 
 	// Display details for requested entry
-	utils.Render(w, "templates/ShowAccount.html", acc)
+	u.Render(w, "templates/ShowAccount.html", acc)
 }
 
 /* NewAccount */
@@ -113,7 +114,7 @@ func NewAccount(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("NewAccount: method:", r.Method) //get request method
 	if r.Method == "GET" {
-		utils.Render(w, "templates/NewAccount.html", nil)
+		u.Render(w, "templates/NewAccount.html", nil)
 		return
 	}
 
@@ -124,14 +125,16 @@ func NewAccount(w http.ResponseWriter, r *http.Request) {
 		AccountNumber:  accNum,
 		AccountName:    r.FormValue("accountname"),
 		AccountBalance: accBal,
+		Email:          r.FormValue("accountemail"),
 	}
 	log.Println("NewAccount: New Account Submitted:", newacc)
 
 	// Get database connection
-	dbc, _ := utils.GetDBConnection()
+	dbc, _ := u.GetDBConnection()
 	defer dbc.Close()
 
-	sqlStatement := fmt.Sprintf("insert into dataentry.accounts (account_number, account_name, account_balance) values (%d,'%s',%f)", newacc.AccountNumber, newacc.AccountName, newacc.AccountBalance)
+	sqlStatement := fmt.Sprintf("INSERT INTO dataentry.accounts (account_number, account_name, account_balance, email) VALUES (%d,'%s',%f,'%s')",
+		newacc.AccountNumber, newacc.AccountName, newacc.AccountBalance, newacc.Email)
 	stmtIns, dberr := dbc.Prepare(sqlStatement)
 	if dberr != nil {
 		log.Fatal("NewAccount: account insert Prepare failed! ", dberr)
@@ -143,7 +146,7 @@ func NewAccount(w http.ResponseWriter, r *http.Request) {
 	log.Println("NewAccount: New account added to database.")
 
 	// Render acknowledgement page
-	utils.Render(w, "templates/NewAccount.html", struct{ Success bool }{true})
+	u.Render(w, "templates/NewAccount.html", struct{ Success bool }{true})
 }
 
 /* DeleteAccount */
@@ -162,7 +165,7 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get database connection
-	dbc, _ := utils.GetDBConnection()
+	dbc, _ := u.GetDBConnection()
 	defer dbc.Close()
 
 	type delstatstr struct {
@@ -170,7 +173,7 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 	}
 	delstat := delstatstr{true}
 
-	sqlStatement := fmt.Sprintf("delete from dataentry.accounts where account_name = '%s'", name)
+	sqlStatement := fmt.Sprintf("DELETE FROM dataentry.accounts WHERE account_name = '%s'", name)
 	stmtDel, dberr := dbc.Prepare(sqlStatement)
 	if dberr != nil {
 		log.Fatal("DeleteAccount: delete account Prepare failed! ", dberr)
@@ -187,7 +190,7 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 	log.Println("Delete account:", name, "Rows affected:", rowsAffected, "deletestat:", delstat.Success)
 
 	// Display deleteaccount confirmation
-	utils.Render(w, "templates/DeleteAccount.html", delstat)
+	u.Render(w, "templates/DeleteAccount.html", delstat)
 }
 
 /* BankStatus */
@@ -196,10 +199,10 @@ func BankStatus(w http.ResponseWriter, r *http.Request) {
 	log.Println("BankStatus: called")
 
 	// Get database connection
-	dbc, _ := utils.GetDBConnection()
+	dbc, _ := u.GetDBConnection()
 	defer dbc.Close()
 
-	sqlStatement := "select up from dataentry.bankapistatus"
+	sqlStatement := "SELECT up FROM dataentry.bankapistatus"
 	rows, dberr := dbc.Query(sqlStatement)
 	if dberr != nil {
 		if dberr == sql.ErrNoRows {
@@ -224,7 +227,7 @@ func BankStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Display details
-	utils.Render(w, "templates/BankStatus.html", bankStatus)
+	u.Render(w, "templates/BankStatus.html", bankStatus)
 }
 
 /* OpenBank */
@@ -232,10 +235,10 @@ func OpenBank(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("OpenBank: called")
 
-	dbc, _ := utils.GetDBConnection()
+	dbc, _ := u.GetDBConnection()
 	defer dbc.Close()
 
-	sqlStatement := "update dataentry.bankapistatus set up=1"
+	sqlStatement := "UPDATE dataentry.bankapistatus SET up=1"
 
 	stmtIns, dberr := dbc.Prepare(sqlStatement)
 	if dberr != nil {
@@ -247,7 +250,7 @@ func OpenBank(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("OpenBank: Status Updated.")
 
-	utils.Render(w, "templates/OpenBank.html", struct{ Success bool }{true})
+	u.Render(w, "templates/OpenBank.html", struct{ Success bool }{true})
 }
 
 /* CloseBank */
@@ -255,10 +258,10 @@ func CloseBank(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("CloseBank: called")
 
-	dbc, _ := utils.GetDBConnection()
+	dbc, _ := u.GetDBConnection()
 	defer dbc.Close()
 
-	sqlStatement := "update dataentry.bankapistatus set up=503"
+	sqlStatement := "UPDATE dataentry.bankapistatus SET up=503"
 
 	stmtIns, dberr := dbc.Prepare(sqlStatement)
 	if dberr != nil {
@@ -270,5 +273,5 @@ func CloseBank(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("CloseBank: Status Updated.")
 
-	utils.Render(w, "templates/CloseBank.html", struct{ Success bool }{true})
+	u.Render(w, "templates/CloseBank.html", struct{ Success bool }{true})
 }

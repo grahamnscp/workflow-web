@@ -1,0 +1,81 @@
+<div class="container">
+  <h1 class="logo"><a tabindex="2" accesskey="1" href="/"><img src="/static/accapp-approval.png" width=150
+        height=150 /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bank Approver - Review Account Application</h1>
+
+  {{ if .Success }}
+
+  <br><br>
+  <h3>Account Application Review Status has been actioned..</h3>
+  </p>
+
+  {{ else }}
+
+  <br><br>
+  <h3>Review Account Application Fraud Risk:</h3>
+  <br>
+
+  <form class="form-horizontal" action="/accappfraudreview?ref={{ .Token }}" method="POST">
+
+    <div class="form-group">
+      <label for="wkflid" class="col-sm-3 control-label">Workflow ID:</label>
+      <input type="text" class="col-sm-3" name="wkflid" size="30" value="{{ .WorkflowID }}"
+        style="background-color:rgb(213, 240, 249);" readonly>
+    </div>
+    <div class="form-group">
+      <label for="firstname" class="col-sm-3 control-label">First Name:</label>
+      <input type="text" class="col-sm-3" name="firstname" size="30" value="{{ .FirstName }}"
+        style="background-color:rgb(213, 240, 249);" readonly>
+    </div>
+    <div class="form-group">
+      <label for="surname" class="col-sm-3 control-label">Surname:</label>
+      <input type="text" class="col-sm-3" name="surname" size="30" value="{{ .Surname }}"
+        style="background-color:rgb(213, 240, 249);" readonly>
+    </div>
+    <div class="form-group">
+      <label for="email" class="col-sm-3 control-label">Email:</label>
+      <input type="text" class="col-sm-3" name="email" size="30" value="{{ .Email }}"
+        style="background-color:rgb(213, 240, 249);" readonly>
+    </div>
+    <div class="form-group">
+      <label for="credit" class="col-sm-3 control-label">Credit Check Result:</label>
+      <input type="text" class="col-sm-3" name="credit" size="30" value="{{ .Credit }}" {{ if eq .Credit "Clear" }}
+        style="background-color:greenyellow;" {{ else }} style="background-color:lightgrey;" {{ end }} readonly>
+    </div>
+    <div class="form-group">
+      <label for="fraud" class="col-sm-3 control-label">Fraud Check Status:</label>
+      <input type="text" class="col-sm-3" name="fraud" size="30" color=red value="{{ .Fraud }}"
+        style="background-color:lightcoral;" readonly>
+    </div>
+    <div class="form-group">
+      <label for="risk" class="col-sm-3 control-label">Fraud Risk:</label>
+      <input type="text" class="col-sm-3" name="risk" size="30" value="{{ .Risk }}" style="background-color:lightcoral;"
+        readonly>
+    </div>
+    <div class="form-group">
+      <label for="reviewer" class="col-sm-3 control-label">Bank Reviewer:</label>
+      <input type="text" class="col-sm-3" name="reviewer" size="30" value="{{ .Reviewer }}"
+        style="background-color:rgb(213, 240, 249);" readonly>
+    </div>
+
+    <br>
+    <div class="form-group">
+      <label for="approval" class="col-sm-3 control-label"><b>Bank Approval Action:</b></label>
+      <select id="approval" class="btn btn-primary btn-sm" name="approval" value="Approved">
+        <option value="Approved">Approve</option>
+        <option value="Denied">Deny</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="comment" class="col-sm-3 control-label">Bank Reviewer Comment:</label>
+      <input type="text" class="col-sm-3" name="comment" size="30" value="{{ .Comment }}">
+    </div>
+
+    <br>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+    </div>
+  </form>
+
+</div>
+
+{{ end }}

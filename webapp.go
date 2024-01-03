@@ -48,6 +48,13 @@ func main() {
 	router.HandleFunc("/amendsorder", handlers.AmendSOrder)
 	router.HandleFunc("/cancelsorder", handlers.CancelSOrder)
 
+	// account onboarding application handlers
+	router.HandleFunc("/newaccapp", handlers.NewAccApp)
+	router.HandleFunc("/accappfraudreview", handlers.AccAppFraudReview)
+
+  // bank user interface
+  router.HandleFunc("/bankuserhome", handlers.BankUserHome)
+
   // schedule handlers
   router.HandleFunc("/newschedule", handlers.NewSchedule)
   router.HandleFunc("/schedules", handlers.ListSchedules)

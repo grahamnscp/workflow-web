@@ -1,0 +1,31 @@
+<div class="container">
+  <h1 class="logo"><a tabindex="2" accesskey="1" href="/"><img src="/static/mybank-logo.png" width=275
+        height=150 /></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Homepage</h1>
+
+<br>
+<h3>Bank Home</h3>
+
+<br><br>
+<table class="table table-hover">
+  <tbody>
+    <tr>
+      <td><b>Registered Email:</b></td>
+      <td><font color="blue">{{ .Email }}</font></td>
+    </tr>
+    <tr>
+      <td><b>Account Name:</b></td>
+      <td><font color="blue">{{ .AccountName }}</font></td>
+    </tr>
+    <tr>
+      <td><b>Account Number:</b></td>
+      <td><font color="blue">{{ .AccountNumber }}</font></td>
+    </tr>
+    <tr>
+      <td><b>Current Balance:</b></td>
+      <td><b>{{ .AccountBalance }}</b></td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+
+</div>

@@ -26,6 +26,7 @@ export TEMPORAL_INSECURE_SKIP_VERIFY=false
 export TRANSFER_MONEY_TASK_QUEUE="go-moneytransfer"
 export STANDING_ORDERS_TASK_QUEUE="StandingOrders"
 export SCHEDULE_WF_TASK_QUEUE="ScheduleWFTQ"
+export ACC_ONBOARDING_TASK_QUEUE="AccOnboardTQ"
 
 # timer for transfer table to be checked (seconds)
 export CHECK_TRANSFER_TASKQUEUE_TIMER=20
