@@ -1,7 +1,97 @@
-# webapp with Temporal workflow backend
-Sample golang web app with local db task queue and Temporal Cloud workflow backend interaction
+# webapp with temporal workflow backend
+This is a sample golang web app with local db task queue and [Temporal](https://temporal.io) Cloud workflow backend interaction.
+This app can be used to demonstrate starting a workflow to process durable integration, durable transactions, workflows as entities, and scheduled business workflows.
 
-![app-homepage](./assets/Home2.png)
+![app-homepage](./assets/home.png)
+
+# What is Demonstrated?
+Use this demo to show the **simplicity** and **durability** enabled by Temporal for business process developers, in a financial services context.
+
+## Velocity
+
+### Focus on coding the business flow predictably as if there are no distributed systems, let Temporal handle the risks of the distributed reality
+* It should be simple for an application to survive a if it crashes or terminates in the middle of a transaction. With Temporal, this is simple. The Temporal runtime makes your your code run to completion, surviving failures along the way.
+* It should be simple with Temporal for an application to survive if a critical service it calls is down or unavailable. With Temporal, this is simple.
+
+[As you can see from the code - no code is needed](./moneytransfer/transfer-workflow.go) (other than using the SDK). See it described below [script](#test-some-failure-states) - then test it out for yourself.
+
+### Enjoy simple future programming interface with Temporal 
+It should be simple to create code that runs at a specific time or times in the future without complexity or confusion, or having your system trip over itself in the future. With Temporal, this is simple and easy to do, even schedules from user input, such as a scheduled business process, for example moving money. Simple to create, simple to understand, simple to debug, simple to test.
+[See the code](./scheduleworkflow/start-scheduleworkflow.go).
+
+
+### Coordinate and reuse existing workflows
+It should be simple to work with multiple levels of workflow orchestration. With Temporal, you can create multiple levels of orchestration simply.
+[See the code](./standingorder/sorder-workflow.go#209).
+
+### Create long-running business processses and update workflows once started
+It should be easy to update existing business processes while they are in progress. With Temporal, this is done with [signals]([url](https://docs.temporal.io/dev-guide/go/features#signals)).
+[See the code](./standingorder/sorder-workflow.go#96).
+
+### Model real-life objects and long-running processes with workflows.
+It should be possible to create entities that have a workflow associated with them. Temporal can do this and manage both the wofkflow and its related entity. For more info, see [this blog post](https://temporal.io/blog/long-running).
+[See the code](./standingorder/sorder-workflow.go#96).
+
+
+## Reliability: systems fail, business processes shouldn't, and it should be easy
+If your applications or infrastructure dies, or if the systems you need to call go down, it would be nice if all business transactions handled this transparently and easily, without implementing a lot of complex patterns. With Temporal, [no code is needed](./moneytransfer/transfer-workflow.go) - other than using the SDK. See it described below [script](#test-some-failure-states) - then test it out for yourself.
+
+## Visibility: I should be able to see what's happening at any point in time!
+Navigate to the Temporal UI at any point to see workflow history, current information, and to understand if something has gone wrong and is recovering.
+
+
+| Primary Value Demonstration | ✅ |
+|:-------------------|---|
+| Velocity          | ✅ |
+| Reliability       | ✅ |
+| Insight           |   |
+
+### Deployment
+| Deployment          | ✅ |
+|:-------------------|---|
+| Local              | ✅ |
+| Disconnected       | 🚫 |
+| Kubernetes         |  |
+
+### Prerequisites
+| Prerequisite       | ✅ |
+|:-------------------|---|
+| Network Connection | ✅ |
+| Go             | ✅|
+| Docker             | ✅|
+| Temporal CLI | ✅ |
+
+### Features
+| Feature            | ✅ | 
+|:-------------------|---|
+| Schedule       | ✅ |
+| Local Activity |   |
+| Signal         | ✅ |
+| Query          | ✅ |
+| Update         | ✅ |
+| Heartbeat      |   |
+| Timer          | ✅ |
+| Activity Retry | ✅ |
+| Cron           |   |   
+| Data Converter | ✅ |
+
+### Patterns
+| Pattern            | ✅ |
+|:-------------------|---|
+| Entity              | ✅ |
+| Fanout              |   |
+| Long-polling        |   |
+| Continue As New     |   |
+| Long-running        | ✅ |
+| Manual Intervention | ✅ |
+| Saga                | ✅ |
+
+### Additional Features
+| Feature            | ✅ |
+|:-------------------|---|
+| User Interface   | ✅ |
+
+# Setup & Run
 
 ## Start local app database first
 The sample mysql database has been configured to run using docker-compose locally and initialise the database with users and sample data.
@@ -14,8 +104,6 @@ docker logs mysql
 Sample data:
 ```
 docker exec -it mysql mysql -u root -p
-dbroot
-
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 ...
 
@@ -98,21 +186,21 @@ export MYSQL_PASSWORD=mysqlpw
 
 The demo app makes use of a custom search attribute that needs to be created in Temporal Cloud for the namespace:   
 
-Name: CustomStringField, Type: Text
+Name: CustomStringField, Type: String
 
 Usage in workflow:
 ```
-workflow.go:  _ = UpsertSearchAttribute(ctx, "CustomStringField", "PROCESSING")
-workflow.go:    _ = UpsertSearchAttribute(ctx, "CustomStringField", "FAILED")
-workflow.go:    _ = UpsertSearchAttribute(ctx, "CustomStringField", "FAILED")
-workflow.go:  _ = UpsertSearchAttribute(ctx, "CustomStringField", "COMPLETED")
+workflow.go:  _ = UpcertSearchAttribute(ctx, "CustomStringField", "PROCESSING")
+workflow.go:    _ = UpcertSearchAttribute(ctx, "CustomStringField", "FAILED")
+workflow.go:    _ = UpcertSearchAttribute(ctx, "CustomStringField", "FAILED")
+workflow.go:  _ = UpcertSearchAttribute(ctx, "CustomStringField", "COMPLETED")
 ```
    
 Note: To simulate a banking service outage on an activity without the need to restart the workers there is a bank status UI in the Bank management app.
 
 ## Start the webapp and navigate to view the local tasks
 
-Start the webapp, by default it listens on port [localhost:8085](http://localhost:8085)
+Start the webapp, by default it listens on port localhost:8085
 ```
 go run webapp.go
 ```
@@ -187,7 +275,7 @@ go run server.go
 
 2023/06/06 11:48:46 Serve Http on 8888
 ```
-
+# Demo Walkthrough - Money Transfer
 ## WebApp Transfers UI
 
 ### List Transfers
@@ -255,4 +343,5 @@ Notice the Workflow History for the affected Withdraw or Deposit Activity will h
 
 ![tcloudui-workflowhistoryactivityretries](./assets/TCloudWorkflowHistoryDepositActivityRetries.png)
   
-
+# Other Demos
+See [Schedule Workflow](./ScheduleWorkflow.md) and [Standing Orders](./StandingOrders.md) for other demos.
