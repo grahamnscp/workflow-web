@@ -31,7 +31,7 @@ The workflow activity sends a formatted email to local MailHog docker image UI.
 ### Schedule delete acknowledgement
 ![schedule-deleted](../assets/schedule-deleted.png)  
 
-### Console output of a Schedule run
+### Console output from Schedules worker
 ![schedule-worker](../assets/schedule-worker-console.png)  
 
   
