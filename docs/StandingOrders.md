@@ -3,7 +3,7 @@ Regular Payments from one account to another account, fixed amount with referenc
   
 ![sorder-home-banner](../assets/sorder-home-banner.png)  
   
-## Demo Architecture
+## Demo Architecture Diagrams
 ![sorders-demo-architecture](../static/sorders-demo-architecture.png)  
 ![sorders-detailed-architecture](../static/sorders-detailed-architecture.png)
   
@@ -19,9 +19,9 @@ This demo just pays on a timer, amend is handled by temporal queries and signals
 ### List currently running standing order workflows
 ![sorder-list](../assets/sorder-list.png)  
 
-### Standing Order details, Amend or Delete
+### Standing Order details, Amend or Cancel
 ![sorder-amend](../assets/sorder-amend.png)  
 
-### Console output from Schedule worker
+### Console output from Standing Orders worker
 ![sorder-worker](../assets/sorder-worker-console.png)  
   

@@ -3,7 +3,7 @@ A sample workflow to demonstrate money transfers started periodically from a dat
   
 ![moneytransfer-home-banner](../assets/moneytransfer-home-banner.png)  
   
-## Demo Architecture
+## Demo Architecture Diagram
 ![mt-demo-architecture](../static/demo-architecture.png)
   
 ## The webapp spawns a cron thread that polls the transfers table
