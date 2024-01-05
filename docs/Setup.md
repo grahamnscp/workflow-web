@@ -1,4 +1,10 @@
 # workflow-web component setup
+
+## Temporal Cloud configuration
+This example assumes that you have a temporal cloud configured and have local client certificate files for your namespace.
+The values are passed into the demo app using environment variables, example direnv .envrc file is included in the repo
+
+## Docker component dependancies
 The various modules of the webapp framework use a number of components that run in docker.  
 
 - mysql
@@ -8,12 +14,7 @@ The various modules of the webapp framework use a number of components that run 
 Ensure that docker is installed and running on your system.  
 
 
-## Temporal Cloud configuration
-This example assumes that you have a temporal cloud configured and have local client certificate files for your namespace.
-The values are passed into the demo app using environment variables, example direnv .envrc file is included in the repo
-
-
-## Start local mysql database
+### Start local mysql database
 The sample mysql database has been configured to run using docker-compose locally and initialise the database with users and sample data.
 ```
 cd mysql
@@ -115,7 +116,7 @@ Bye
 ```
 
 
-## Start local mailhog service
+### Start local mailhog service
 Some of the demo apps use email notifications with call back actions, mailhog docker image is used for this
 ```
 cd mailhog
@@ -128,7 +129,7 @@ The mailhog UI is available at [localhost:8025](http://localhost:8025)
 
 
 
-## Start local mongodb service
+### Start local mongodb service
 The new account onboarding workflow uses various mongodb collections
 ```
 cd mongodb
