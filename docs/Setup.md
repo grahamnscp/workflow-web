@@ -5,7 +5,7 @@ This example assumes that you have a temporal cloud configured and have local cl
 The values are passed into the demo app using environment variables, example direnv .envrc file is included in the repo
 
 Source or cp .envrc.example to .envrc and direnv allow:
-[direnv-example](../.envrc.example)
+[.envrc.example](../.envrc.example)
   
 ## Docker component dependancies
 The various modules of the webapp framework use a number of components that run in docker.  
