@@ -1,6 +1,7 @@
 # Sample Go webapp with Temporal workflow backend
 Sample golang web app framework to launch a modular set of application components demonstrating various aspects of Temporal
 
+
 ## Main App Menu Home Page / Demo Component Launcher
 The main webapp.go provides a launcher home screen to access the various application components.
 
@@ -20,9 +21,9 @@ Docs:
 - [New Account Onboarding with Manual Approval](docs/AccountOnboarding.md)
 - [Bank Admin Account Management](docs/AccountManagement.md)
 - [Freestanding SDK management of Schedules feature](docs/ScheduleWorkflow.md)
-
   
-  
+    
+    
 ## Temporal Demo Overview
 
 ### What is Demonstrated?
