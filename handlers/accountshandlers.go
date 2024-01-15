@@ -119,10 +119,9 @@ func NewAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm() //Parse url parameters passed, then parse the response packet for the POST body (request body)
-	accNum, _ := strconv.Atoi(r.FormValue("accountnumber"))
 	accBal, _ := strconv.ParseFloat(strings.TrimSpace(r.FormValue("accountbalance")), 64)
 	newacc := Account{
-		AccountNumber:  accNum,
+		AccountNumber:  0,
 		AccountName:    r.FormValue("accountname"),
 		AccountBalance: accBal,
 		Email:          r.FormValue("accountemail"),
@@ -133,8 +132,9 @@ func NewAccount(w http.ResponseWriter, r *http.Request) {
 	dbc, _ := u.GetDBConnection()
 	defer dbc.Close()
 
-	sqlStatement := fmt.Sprintf("INSERT INTO dataentry.accounts (account_number, account_name, account_balance, email) VALUES (%d,'%s',%f,'%s')",
-		newacc.AccountNumber, newacc.AccountName, newacc.AccountBalance, newacc.Email)
+	sqlStatement := fmt.Sprintf("INSERT INTO dataentry.accounts (account_number,account_name,account_balance,email) SELECT max(account_number)+1, '%s', %f, '%s' FROM dataentry.accounts", 
+		newacc.AccountName, newacc.AccountBalance, newacc.Email)
+
 	stmtIns, dberr := dbc.Prepare(sqlStatement)
 	if dberr != nil {
 		log.Fatal("NewAccount: account insert Prepare failed! ", dberr)

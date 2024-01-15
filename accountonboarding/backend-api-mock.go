@@ -198,7 +198,9 @@ func ProvisionAccountAPI(accountName string, email string) (string, int, error) 
 	}
 
 	// Insert new account
-	sqlStatement = fmt.Sprintf("insert into dataentry.accounts (account_number,account_name,account_balance,email) select max(account_number)+1, '%s', %d, '%s' from dataentry.accounts", accountName, NewAccountBonusBalance, email)
+	sqlStatement = fmt.Sprintf("INSERT INTO dataentry.accounts (account_number,account_name,account_balance,email) SELECT max(account_number)+1, '%s', %d, '%s' FROM dataentry.accounts",
+		accountName, NewAccountBonusBalance, email)
+
 	stmtIns, dberr := dbc.Prepare(sqlStatement)
 	if dberr != nil {
 		log.Println("ProvisionAccountAPI: account insert Prepare failed! ", dberr)
