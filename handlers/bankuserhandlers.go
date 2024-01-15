@@ -59,5 +59,5 @@ func BankUserHome(w http.ResponseWriter, r *http.Request) {
 	log.Println("BankUserHome: User Account:", acc)
 
 	u.Render(w, "templates/BankUserHome.html", acc)
-	return
+	//return
 }

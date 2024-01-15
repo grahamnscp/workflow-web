@@ -2,7 +2,6 @@ package moneytransfer
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -59,7 +58,7 @@ func QueryMoneyTransfer(w http.ResponseWriter, wfinfo *WorkflowInfo) (err error)
 	log.Printf("QueryMoneyTransfer: %d %v events retrieved", historyEventCount, reflect.TypeOf(history))
 
 	w.Header().Add("Content-Type", "text/html")
-	fmt.Fprintln(w, "<h1>Workflow History for:", wfinfo.WorkflowID, ", ", wfinfo.RunID, "</h1>")
+	fmt.Fprintf(w, "<h1>Workflow History for: %s, %s</h1>", wfinfo.WorkflowID, wfinfo.RunID)
 
 	for h := range history {
 		// type: history.HistoryEvent
@@ -93,7 +92,7 @@ func QueryMoneyTransfer(w http.ResponseWriter, wfinfo *WorkflowInfo) (err error)
 
 			attributes := c["Attributes"].(map[string]interface{})["workflow_execution_started_event_attributes"]
 			fmt.Printf("attributes: %v\n", attributes)
-			fmt.Fprintln(w, "<font color=green><b>attributes: ", attributes, "</b></font><br>")
+			fmt.Fprintln(w, "<br><font color=green><b>attributes: ", attributes, "</b></font><br>")
 
 		case enumspb.EventType_value["WorkflowTaskScheduled"]:
 			//fmt.Printf("case WorkflowTaskScheduled\n")
@@ -119,7 +118,10 @@ func QueryMoneyTransfer(w http.ResponseWriter, wfinfo *WorkflowInfo) (err error)
 			fmt.Printf("attributes: %v\n", attributes)
 			search_attribute := attributes.(map[string]interface{})["search_attributes"].(map[string]interface{})["indexed_fields"]
 			fmt.Printf("search_attribute: %v\n", search_attribute)
-			fmt.Fprintln(w, "<font color=green><b>search_attribute: ", search_attribute, "</b></font><br>")
+
+			attr := search_attribute.(map[string]interface{})["CustomStringField"].(map[string]interface{})["data"].(string)
+			//fmt.Fprintln(w, "<font color=green><b>search_attribute: ", search_attribute, "</b></font><br>")
+			fmt.Fprintf(w, "<br><font color=green><b>search_attribute: CustomStringFieldi: %s </b></font><br>", u.DecodeB64(attr))
 
 		case enumspb.EventType_value["ActivityTaskScheduled"]:
 			//fmt.Printf("case ActivityTaskScheduled\n")
@@ -130,7 +132,7 @@ func QueryMoneyTransfer(w http.ResponseWriter, wfinfo *WorkflowInfo) (err error)
 			fmt.Printf("attributes: %v\n", attributes)
 			activity_type := attributes.(map[string]interface{})["activity_type"].(map[string]interface{})["name"].(string)
 			fmt.Printf("activity_type: %s\n", activity_type)
-			fmt.Fprintln(w, "<font color=green><b>activity_type: ", activity_type, "</b></font><br>")
+			fmt.Fprintln(w, "<br><font color=green><b>activity_type: ", activity_type, "</b></font><br>")
 
 		case enumspb.EventType_value["ActivityTaskStarted"]:
 			//fmt.Printf("case ActivityTaskStarted\n")
@@ -154,7 +156,7 @@ func QueryMoneyTransfer(w http.ResponseWriter, wfinfo *WorkflowInfo) (err error)
 
 			attributes := c["Attributes"].(map[string]interface{})["timer_started_event_attributes"]
 			fmt.Printf("attributes: %v\n", attributes)
-			fmt.Fprintln(w, "<font color=green><b>attributes: ", attributes, "</b></font><br>")
+			fmt.Fprintln(w, "<br><font color=green><b>attributes: ", attributes, "</b></font><br>")
 
 		case enumspb.EventType_value["TimerFired"]:
 			//fmt.Printf("case TimerFired\n")
@@ -216,29 +218,3 @@ func getHistory(c client.Client, ctx context.Context, execution *commonpb.Workfl
 	}
 	return events, nil
 }
-
-/* base64 decode string */
-func DecodeB64(message string) (retour string) {
-	base64Text := make([]byte, base64.StdEncoding.DecodedLen(len(message)))
-	base64.StdEncoding.Decode(base64Text, []byte(message))
-	return string(base64Text)
-}
-
-/* handy function to remove nil fields in map[string]interface{} */
-/*
-func removeNils(initialMap map[string]interface{}) map[string]interface{} {
-  withoutNils := map[string]interface{}{}
-  for key, value := range initialMap {
-    _, ok := value.(map[string]interface{})
-    if ok {
-      value = removeNils(value.(map[string]interface{}))
-      withoutNils[key] = value
-      continue
-    }
-    if value != nil {
-      withoutNils[key] = value
-    }
-  }
-  return withoutNils
-}
-*/

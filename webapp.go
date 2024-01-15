@@ -62,6 +62,9 @@ func main() {
   router.HandleFunc("/updateschedule", handlers.UpdateSchedule)
   router.HandleFunc("/deleteschedule", handlers.DeleteSchedule)
 
+  // workflow status handlers
+  router.HandleFunc("/listrunning", handlers.ListRunningWFs)
+
 
 	// Start periodic background transfer table task
 	queryDelay, err := strconv.ParseUint(CheckTransferTaskQueueTimer, 10, 64)

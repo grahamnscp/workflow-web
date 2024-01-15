@@ -50,7 +50,7 @@
       The main workflow spawns two child workflows to handle Credit and Fraud checks asynchronously.<br>
       The Credit check is automatic based on a Blacklist mongodb collection lookup, the Fraud check 
       uses a Fraud Risk collection, for high fraud risks a human level 2 review and approval is required.<p>
-      Human interaction is handled via <a href="http://localhost:8025/#">email</a> and with url token to map back to workflows.<p>
+      Human interaction is handled via <a href="http://localhost:8025/#" target="_blank">email</a> and with url token to map back to workflows.<p>
       <a href="/newaccapp"><button type="button" class="btn btn-primary btn-sm">Launch</button></a>&nbsp;&nbsp;&nbsp;
       <a href="/static/onboarding-demo-architecture.png" target="_blank">Demo Workflow Diagram</a>
       </p>
@@ -69,7 +69,8 @@
       Bank Status can be toggled to simulate an outage for the mock backend API
       </p>
       <a href="/accounts"><button type="button" class="btn btn-primary btn-sm">Launch</button></a>&nbsp;
-      <a href="/bankstatus"><button type="button" class="btn btn-primary btn-sm">Bank Status</button></a>
+      <a href="/bankstatus"><button type="button" class="btn btn-primary btn-sm">Bank Status</button></a>&nbsp;
+      <a href="/listrunning"><button type="button" class="btn btn-primary btn-sm">List Workflows</button></a>
     </div>
   </div>
 

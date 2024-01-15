@@ -5,6 +5,7 @@ import (
 )
 
 var AccOnboardingTaskQueueName = os.Getenv("ACC_ONBOARDING_TASK_QUEUE")
+
 var AccOnboardingSleep int = 120
 var CreditCheckDelay int = 15
 var FraudCheckDelay int = 25
@@ -97,4 +98,3 @@ type FraudRisk struct {
 	Email string
 	Risk  int
 }
-

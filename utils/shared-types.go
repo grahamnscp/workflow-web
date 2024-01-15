@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -13,3 +14,6 @@ var SDKMetrics bool = true
 // AccountApplication uses mongodb
 var MongoDBName = "bank"
 var MongoURI = fmt.Sprintf("mongodb://bankuser:bankuserpwd@localhost:27017/%s", MongoDBName)
+
+// Misc
+var nonAlphanumericRegex = regexp.MustCompile(`[^a-zA-Z0-9- ]+`)

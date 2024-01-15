@@ -36,13 +36,17 @@ func ExecuteCheckTransferTaskCronJob (internalSeconds uint64) {
 /* CheckTransferQueueTask - Check transfer queue table task */
 func CheckTransferQueueTask() {
 
-  log.Println("CheckTransferQueueTask: called")
+  //log.Println("CheckTransferQueueTask: called")
+
+  // TODO: Tidy PROCESSING entries where workflow Completed (restarted webapp)
 
   // Call handler to read db task queue and return oldest REQUESTED task
+  // TODO: Add loop to process all requests before sleeping
   txfr, err := QueryTransferRequest()
   if err != nil {
     log.Println("CheckTransferQueueTask: Failed to query transfer task queue!", err)
     return
+
   } else if *txfr == (Transfer{}) {
     // no entry found on queue
     log.Println("CheckTransferQueueTask: No transfers in queue.")
@@ -50,7 +54,7 @@ func CheckTransferQueueTask() {
   }
 
   // transfer to process
-  log.Println("CheckTransferQueueTask: Transfer:", *txfr)
+  log.Println("CheckTransferQueueTask: Transfer Requested:", *txfr)
 
   // Populate PaymentDetails object from tranfer task entry
   pmnt := &mt.PaymentDetails{
@@ -62,7 +66,8 @@ func CheckTransferQueueTask() {
   log.Printf("CheckTransferQueueTask: %sPaymentDetails: %v%s", u.ColorYellow, *pmnt, u.ColorReset)
 
   // Call StartMoneyTransfer to start the workflow..
-  wfinfo, wferr := mt.StartMoneyTransfer(pmnt)
+  wfinfo, wferr := mt.StartMoneyTransfer(pmnt, txfr.Id)
+
   wfinfo.Id = txfr.Id
   if wferr != nil {
     wfinfo.Status = "FAILED"
@@ -158,7 +163,7 @@ func UpdateTransferRequest (wfinfo *mt.WorkflowInfo) error {
   dbc, _ := u.GetDBConnection()
   defer dbc.Close()
 
-  sqlStatement := fmt.Sprintf("update moneytransfer.transfer set status='%s',t_wkfl_id='%s',t_run_id='%s',t_taskqueue='%s',t_info='%s' where id=%d", wfinfo.Status, wfinfo.WorkflowID, wfinfo.RunID, wfinfo.TaskQueue, wfinfo.Info, wfinfo.Id)
+  sqlStatement := fmt.Sprintf("UPDATE moneytransfer.transfer SET status='%s',t_wkfl_id='%s',t_run_id='%s',t_taskqueue='%s',t_info='%s' WHERE id=%d", wfinfo.Status, wfinfo.WorkflowID, wfinfo.RunID, wfinfo.TaskQueue, wfinfo.Info, wfinfo.Id)
   stmtIns, dberr := dbc.Prepare(sqlStatement)
   if dberr != nil {
     log.Println("UpdateTransferRequest: Prepare failed! ", dberr)

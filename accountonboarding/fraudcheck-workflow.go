@@ -118,9 +118,8 @@ func FraudCheckWorkflow(ctx workflow.Context, appform ApplicationForm) (string, 
 	// Main
 	logger.Info(u.ColorGreen, "FraudChk-Workflow:", u.ColorReset, "Performing Fraud Check for -", application.Email)
 
-  // upsert Fraud Check as ACTIVE
+	// upsert Fraud Check as ACTIVE
 	_ = u.UpsertSearchAttribute(ctx, "CustomStringField", "ACTIVE-FRAUDCK")
-
 
 	// store parent workflow details for later signalling
 	parentWorkflow = workflow.GetInfo(ctx).ParentWorkflowExecution.ID
@@ -220,7 +219,7 @@ func FraudCheckWorkflow(ctx workflow.Context, appform ApplicationForm) (string, 
 			logger.Info(u.ColorGreen, "FraudChk-Workflow:", u.ColorReset, "Level 2 Fraud Check waiting for Approval from -", approvalStatus.Approver)
 
 			// long sleep waiting for signal
-      // - TODO: send periodic reminder to reviewer
+			// - TODO: send periodic reminder to reviewer
 			workflow.AwaitWithTimeout(ctx, time.Duration(FraudCheckSleep)*time.Second, selector.HasPending)
 
 			for selector.HasPending() {
