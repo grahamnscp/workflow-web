@@ -24,5 +24,6 @@ dev/*
 assets/transfer-workflow.go.txt
 assets/dev.txt
 dev.txt
+*/*.swp
 
 .gitignore

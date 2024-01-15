@@ -203,7 +203,6 @@ func StandingOrderWorkflow(ctx workflow.Context, pdetails mt.PaymentDetails, psc
 			cwo := workflow.ChildWorkflowOptions{
 				WorkflowID: fmt.Sprintf("go-txfr-sorder-payment-%d", thisid),
 				TaskQueue:  mt.MoneyTransferTaskQueueName,
-				//TaskQueue: StandingOrdersTaskQueueName,
 			}
 			childCtx := workflow.WithChildOptions(ctx, cwo)
 

@@ -10,7 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-   _ "net/http/pprof"
+	_ "net/http/pprof"
 
 	"webapp/handlers"
 	"webapp/transferclient"
@@ -52,19 +52,18 @@ func main() {
 	router.HandleFunc("/newaccapp", handlers.NewAccApp)
 	router.HandleFunc("/accappfraudreview", handlers.AccAppFraudReview)
 
-  // bank user interface
-  router.HandleFunc("/bankuserhome", handlers.BankUserHome)
+	// bank user interface
+	router.HandleFunc("/bankuserhome", handlers.BankUserHome)
 
-  // schedule handlers
-  router.HandleFunc("/newschedule", handlers.NewSchedule)
-  router.HandleFunc("/schedules", handlers.ListSchedules)
-  router.HandleFunc("/showschedule", handlers.ShowSchedule)
-  router.HandleFunc("/updateschedule", handlers.UpdateSchedule)
-  router.HandleFunc("/deleteschedule", handlers.DeleteSchedule)
+	// schedule handlers
+	router.HandleFunc("/newschedule", handlers.NewSchedule)
+	router.HandleFunc("/schedules", handlers.ListSchedules)
+	router.HandleFunc("/showschedule", handlers.ShowSchedule)
+	router.HandleFunc("/updateschedule", handlers.UpdateSchedule)
+	router.HandleFunc("/deleteschedule", handlers.DeleteSchedule)
 
-  // workflow status handlers
-  router.HandleFunc("/listrunning", handlers.ListRunningWFs)
-
+	// workflow status handlers
+	router.HandleFunc("/listrunning", handlers.ListRunningWFs)
 
 	// Start periodic background transfer table task
 	queryDelay, err := strconv.ParseUint(CheckTransferTaskQueueTimer, 10, 64)
@@ -73,9 +72,8 @@ func main() {
 	}
 	go transferclient.ExecuteCheckTransferTaskCronJob(queryDelay)
 
-  // pprof thread /debug/pprof
+	// pprof thread /debug/pprof
 	go http.ListenAndServe("localhost:6060", nil)
-  
 
 	// Serve
 	log.Print("Serve Http on 8085")

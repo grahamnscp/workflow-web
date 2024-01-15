@@ -49,7 +49,7 @@ func CheckTransferQueueTask() {
 
   } else if *txfr == (Transfer{}) {
     // no entry found on queue
-    log.Println("CheckTransferQueueTask: No transfers in queue.")
+    log.Printf("CheckTransferQueueTask: %sNo transfers in queue.%s", u.ColorYellow, u.ColorReset)
     return
   }
 
@@ -118,7 +118,7 @@ func CheckTransferQueueTask() {
  */
 func QueryTransferRequest () (*Transfer, error) {
 
-  log.Println("QueryTransferRequest: called")
+  //log.Println("QueryTransferRequest: called")
 
   // Get database connection
   dbc, _ := u.GetDBConnection()
@@ -142,7 +142,7 @@ func QueryTransferRequest () (*Transfer, error) {
     rows.Scan(&tf.Id, &tf.Origin, &tf.Destination, &tf.Amount, &tf.Reference, &tf.Status)
   }
   if *tf != (Transfer{}) {
-    log.Println("QueryTransferRequest: Transfer:", *tf)
+    log.Println("QueryTransferRequest: Transfer Requested:", *tf)
   }
 
   return tf, nil
