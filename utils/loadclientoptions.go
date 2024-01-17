@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 
@@ -22,37 +23,48 @@ func LoadClientOptions(addMetrics bool, metricsPort string) (client.Options, err
 	// Read env variables
 	targetHost := os.Getenv("TEMPORAL_HOST_URL")
 	namespace := os.Getenv("TEMPORAL_NAMESPACE")
-	clientCert := os.Getenv("TEMPORAL_TLS_CERT")
-	clientKey := os.Getenv("TEMPORAL_TLS_KEY")
-	useTLS, _ := strconv.ParseBool(os.Getenv("USE_TLS"))
 
-	// Optional:
-	serverRootCACert := os.Getenv("TEMPORAL_SERVER_ROOT_CA_CERT")
-	serverName := os.Getenv("TEMPORAL_SERVER_NAME")
+	// use server mTLS?
+	useTLS := false
+	useTLS, _ = strconv.ParseBool(os.Getenv("USE_TLS"))
+	var cert tls.Certificate
+	var clientCert, clientKey, serverName string
+	var insecureSkipVerify bool = false
+	var serverCAPool *x509.CertPool
 
-	insecureSkipVerify, _ := strconv.ParseBool(os.Getenv("TEMPORAL_INSECURE_SKIP_VERIFY"))
+	if useTLS {
+		clientCert := os.Getenv("TEMPORAL_TLS_CERT")
+		clientKey := os.Getenv("TEMPORAL_TLS_KEY")
 
+		// Optional:
+		serverRootCACert := os.Getenv("TEMPORAL_SERVER_ROOT_CA_CERT")
+		serverName := os.Getenv("TEMPORAL_SERVER_NAME")
+
+		insecureSkipVerify, _ := strconv.ParseBool(os.Getenv("TEMPORAL_INSECURE_SKIP_VERIFY"))
+
+		// Load client cert
+		cert, err := tls.LoadX509KeyPair(clientCert, clientKey)
+		if err != nil {
+			return client.Options{}, fmt.Errorf("failed loading client cert and key: %w", err)
+		}
+
+		// Load server CA if given
+		if serverRootCACert != "" {
+			serverCAPool = x509.NewCertPool()
+			b, err := os.ReadFile(serverRootCACert)
+			if err != nil {
+				return client.Options{}, fmt.Errorf("failed reading server CA: %w", err)
+			} else if !serverCAPool.AppendCertsFromPEM(b) {
+				return client.Options{}, fmt.Errorf("server CA PEM file invalid")
+			}
+		}
+		log.Println("LoadClientOptions: SSL Connection:", clientCert, clientKey, cert, serverRootCACert, serverName, insecureSkipVerify)
+	}
+
+	// encrypt payloads?
 	encyptPayload, _ := strconv.ParseBool(os.Getenv("ENCRYPT_PAYLOAD"))
 
-	//log.Println("LoadClientOptions:", targetHost, namespace, clientCert, clientKey, serverRootCACert, serverName, insecureSkipVerify, encyptPayload)
-
-	// Load client cert
-	cert, err := tls.LoadX509KeyPair(clientCert, clientKey)
-	if err != nil {
-		return client.Options{}, fmt.Errorf("failed loading client cert and key: %w", err)
-	}
-
-	// Load server CA if given
-	var serverCAPool *x509.CertPool
-	if serverRootCACert != "" {
-		serverCAPool = x509.NewCertPool()
-		b, err := os.ReadFile(serverRootCACert)
-		if err != nil {
-			return client.Options{}, fmt.Errorf("failed reading server CA: %w", err)
-		} else if !serverCAPool.AppendCertsFromPEM(b) {
-			return client.Options{}, fmt.Errorf("server CA PEM file invalid")
-		}
-	}
+	log.Println("LoadClientOptions: Connection", targetHost, namespace, clientCert, clientKey)
 
 	// Return client options
 	if encyptPayload {
