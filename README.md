@@ -60,8 +60,7 @@ It should be possible to create entities that have a workflow associated with th
 | Deployment          | ✅ |  
 |:-------------------|---|  
 | Local              | ✅ |  
-| Disconnected       | 🚫 |  
-| Kubernetes         |  |  
+| Temporal Cloud     | ✅ |  
 
 #### Prerequisites
 | Prerequisite       | ✅ |  
@@ -78,6 +77,7 @@ It should be possible to create entities that have a workflow associated with th
 | Schedule       | ✅ |  
 | Local Activity | ✅ |  
 | Signal         | ✅ |  
+| Signal Update  |   |  
 | Query          | ✅ |  
 | Update         | ✅ |  
 | Heartbeat      |   |  
